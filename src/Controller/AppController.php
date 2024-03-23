@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Event\EventInterface;
 
 /**
  * Application Controller
@@ -44,11 +45,23 @@ class AppController extends Controller
         $this->loadComponent('Flash');
 
         $this->loadComponent('Authentication.Authentication');
-        
+
         /*
          * Enable the following component for recommended CakePHP form protection settings.
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
+    }
+
+    public function beforeRender(EventInterface $event)
+    {
+        $session = $this->Authentication->getIdentity('Auth.user.id');
+        $this->set('auth', $this->Authentication->getIdentity());
+        // Perform actions before rendering the view
+        // For example, you can set common variables that need to be available in all views
+        $this->set('appName', 'My CakePHP App');
+
+        // Call parent method to ensure the rest of the beforeRender logic is executed
+        parent::beforeRender($event);
     }
 }

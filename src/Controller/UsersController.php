@@ -20,6 +20,9 @@ class UsersController extends AppController
         $query = $this->Users->find();
         $users = $this->paginate($query);
 
+        //$user = $this->Authentication->getIdentity();
+        // var_dump($user);
+        // exit();
         $this->set(compact('users'));
     }
 
@@ -69,7 +72,7 @@ class UsersController extends AppController
         $result = $this->Authentication->getResult();
         // If the user is logged in send them away.
         if ($result->isValid()) {
-            $target = $this->Authentication->getLoginRedirect() ?? '/home';
+            $target = $this->Authentication->getLoginRedirect() ?? '/users';
             return $this->redirect($target);
         }
         if ($this->request->is('post')) {
